@@ -12,7 +12,7 @@ Fill in every line marked `ANSWER:` (one to three sentences each). Push before t
 1. Paste the output of `ansible-inventory --graph`.
    ANSWER:
 
-2. You ran `ansible web -m ansible.builtin.apt -a "name=tree state=present" -b` twice. What did each run report (changed or ok), and why?
+2. You ran `ansible web -b -m ansible.builtin.apt -a "name=htop state=present update_cache=true"` twice. What did each run report (changed or ok), and why?
    ANSWER:
 
 3. What is the difference between `ansible web -a "uptime"` and `ansible web -m ping`? Which one checks that Python works on the target?
