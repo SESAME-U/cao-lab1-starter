@@ -1,0 +1,83 @@
+name: Autograding
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ansible and test tools
+        run: pip install ansible-core pytest pyyaml
+
+      - name: Start two test servers (containers)
+        run: bash tests/ci-targets.sh
+
+      - name: YAML fixed
+        id: yaml
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part C: yaml/shop.yml loads with the right values"
+          command: python -m pytest -q -p no:cacheprovider tests/test_yaml.py
+          timeout: 5
+          max-score: 2
+
+      - name: Inventory structure
+        id: inventory
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part B: group web with 2 hosts and http_port=80"
+          command: python tests/check_inventory.py
+          timeout: 5
+          max-score: 1
+
+      - name: Playbook converges
+        id: converge
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part D: playbook runs and both pages say Hello"
+          command: bash tests/check_playbook.sh converge
+          timeout: 10
+          max-score: 3
+
+      - name: Playbook is idempotent
+        id: idempotent
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "Part D: second run reports changed=0"
+          command: bash tests/check_playbook.sh idempotent
+          timeout: 10
+          max-score: 2
+
+      - name: Submission answered
+        id: submission
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: "SUBMISSION.md complete"
+          command: bash scripts/check-submission.sh
+          timeout: 5
+          max-score: 2
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          YAML_RESULTS: "${{ steps.yaml.outputs.result }}"
+          INVENTORY_RESULTS: "${{ steps.inventory.outputs.result }}"
+          CONVERGE_RESULTS: "${{ steps.converge.outputs.result }}"
+          IDEMPOTENT_RESULTS: "${{ steps.idempotent.outputs.result }}"
+          SUBMISSION_RESULTS: "${{ steps.submission.outputs.result }}"
+        with:
+          runners: yaml,inventory,converge,idempotent,submission

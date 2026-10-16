@@ -1,0 +1,24 @@
+# Lab 1, Part C: fix this YAML file.
+#
+# It describes the e-commerce shop you will deploy all semester.
+# It has 6 problems. Some make it invalid; others make it valid but WRONG.
+# The comment on each line says what the value must be once loaded.
+#
+# Check your work with:
+#   yamllint yaml/shop.yml
+#   make test-yaml
+shop:
+  name: SESAME Shop                       # the string "SESAME Shop"
+  tagline: Fast: cheap: reliable          # the string "Fast: cheap: reliable"
+  country: NO                             # the string "NO" (Norway), not a boolean
+  version: 1.10                           # the string "1.10", not the number 1.1
+  ports:
+    - 80
+	- 443                                 # a list of two numbers: 80 and 443
+  admins:                                 # a list of two people, each with name and email
+    - name: Amira
+      email: amira@example.com
+    - name: Youssef
+    email: youssef@example.com
+  enabled: yes                            # the boolean true
+  enabled: true

@@ -1,0 +1,19 @@
+# Lab 1, Part D: your first playbook.
+#
+# Goal: every server in the group "web" serves a page that says
+#       "Hello from <its inventory name>", e.g. "Hello from web1".
+#
+# Write ONE play with these three tasks, using only ansible.builtin modules:
+#   1. Install the package "nginx" (module: apt, refresh the cache,
+#      cache_valid_time: 3600 so a second run does not count as a change)
+#   2. Write /var/www/html/index.html with the content
+#        <h1>Hello from {{ inventory_hostname }}</h1>
+#      (module: copy, with "content:")
+#   3. Make sure the nginx service is started and enabled (module: service)
+#
+# The play needs: hosts: web   and   become: true
+#
+# Run it:          ansible-playbook playbooks/site.yml
+# Run it again:    the PLAY RECAP must show changed=0 for both servers.
+#
+# Write your play below this line.
