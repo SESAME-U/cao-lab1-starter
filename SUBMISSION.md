@@ -1,6 +1,6 @@
 # Lab 1 submission
 
-Fill in every line marked `ANSWER:` (one to three sentences each). Push before the start of the week 3 session.
+Fill in every line marked `ANSWER:` (one to three sentences each). Write the answer on the same line, right after `ANSWER:`; for pasted output, add a short summary there and paste the output below. Push before the start of the week 3 session.
 
 ## Part A - targets
 
