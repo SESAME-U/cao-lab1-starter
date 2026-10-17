@@ -5,15 +5,15 @@ set -euo pipefail
 
 echo "==> Installing Ansible (user scope, via pipx)"
 if ! command -v ansible >/dev/null 2>&1; then
-  python3 -m pip install --user --quiet pipx
-  python3 -m pipx ensurepath >/dev/null
-  python3 -m pipx install --include-deps ansible >/dev/null
+  command -v pipx >/dev/null 2>&1 || sudo apt-get install -y -qq pipx
+  pipx ensurepath >/dev/null
+  pipx install --include-deps ansible >/dev/null
 else
   echo "    already installed, skipping"
 fi
 
 echo "==> Installing lab test tools (pytest, PyYAML, yamllint)"
-python3 -m pip install --user --quiet pytest pyyaml yamllint
+python3 -m pip install --user --quiet --break-system-packages pytest pyyaml yamllint
 
 echo "==> Creating your lab SSH key (~/.ssh/cao_lab) if missing"
 [[ -f "$HOME/.ssh/cao_lab" ]] || ssh-keygen -q -t ed25519 -N "" -f "$HOME/.ssh/cao_lab" -C "cao-lab"
